@@ -48,7 +48,10 @@ async def process_gender(message: Message, state: FSMContext):
 
             person = data.as_dict()
             await message.answer(
-                f"Подтвердите ваши данные: Имя: {person['name']}"
+                f"Подтвердите ваши данные: Имя: {person['name']}\n"
+                f"Возраст:{person['age']}\n"
+                f"Пол:{person['gender']}"
+
             )
         Survey.next()
 

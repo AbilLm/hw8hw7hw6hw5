@@ -1,6 +1,8 @@
 import sqlite3
 from pathlib import Path
 from aiogram import Dispatcher
+from config import bot, dp
+
 DB_PATH = Path(__file__).parent.parent
 DB_NAME = 'db.sqlite'
 db = sqlite3.connect(DB_PATH / DB_NAME)
@@ -38,11 +40,11 @@ def insert_data():
 
 
     cursor.execute("""INSERT INTO Books (name, price, image_url, genre_id) VALUES
-        ('Война и мир', 1500.00, 'images/cover.jpg', 2),
-        ('Мастер и Маргарита', 1200.00, 'images/cover.jpg', 4),
-        ('Дозоры', 1700.00, 'images/cover.jpg', 1),
-        ('Братья Карамазовы', 1600.00, 'images/cover.jpg', 2),
-        ('Азазель', 1000.00, 'images/cover.jpg', 3)
+        ('Война и мир', 1500.00, 'media/img.png', 2),
+        ('Мастер и Маргарита', 1200.00, 'media/img.png', 4),
+        ('Дозоры', 1700.00, 'media/img.png', 1),
+        ('Братья Карамазовы', 1600.00, 'media/img.png', 2),
+        ('Азазель', 1000.00, 'media/img.png', 3)
     """)
     db.commit()
 
@@ -63,8 +65,9 @@ def fetch_books():
 
 async def show_mag(message):
     products = cursor.execute('SELECT * FROM Books').fetchall()
-    for i in products:
-        await message.answer(f'{i}')
+    list1 = list(products)
+   # for j in list1:
+    #    await bot.send_photo(chat_id=message.from_user.id, photo=j[3], caption=f'{j[1]}\n{j[2]}')
 
 
 if __name__ == "__main__":

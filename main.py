@@ -3,10 +3,11 @@ from config import dp
 from handlers.picture import pic
 from handlers.start import start
 from handlers import fsm_anketa
+from db import bot_db
 
 
 
-
+bot_db.register_handlers_db(dp)
 
 if __name__ == "__main__":
     dp.register_message_handler(pic, commands=['picture'])

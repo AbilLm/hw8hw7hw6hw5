@@ -1,6 +1,6 @@
 import sqlite3
 from pathlib import Path
-from aiogram import Dispatcher
+from aiogram import Dispatcher, types
 from config import bot, dp
 
 DB_PATH = Path(__file__).parent.parent
@@ -63,11 +63,24 @@ def fetch_books():
     #     print(b[1])
     return books
 
-async def show_mag(message):
-    products = cursor.execute('SELECT * FROM Books').fetchall()
+
+def keyboard(pr_id:int):
+    kb = types.InlineKeyboardMarkup()
+    kb.add(types.InlineKeyboardButton('купить', callback_data=f'buy_{pr_id}'))
+    return kb
+
+products = cursor.execute('SELECT * FROM Books').fetchall()
+
+async def show_mag(message: types.Message):
+    kb = types.ReplyKeyboardRemove()
+    await message.answer('вот все книги:', reply_markup=kb)
     list1 = list(products)
-   # for j in list1:
-    #    await bot.send_photo(chat_id=message.from_user.id, photo=j[3], caption=f'{j[1]}\n{j[2]}')
+    for j in list1:
+        await message.answer(j[1], reply_markup=keyboard(j[0]))
+
+async def buy_prouct(call: types.CallbackQuery):
+    id = call.data[4:]
+    await call.answer(f"Вы купили Book {id}")
 
 
 if __name__ == "__main__":
@@ -77,5 +90,3 @@ if __name__ == "__main__":
     insert_data()
     fetch_books()
 
-def register_handlers_db(dp:Dispatcher):
-    dp.register_message_handler(show_mag, commands=['magaz'])
